@@ -1,0 +1,13 @@
+// px转换为rem
+@function px2rem($px){
+    $rem : ((414/375)*100);
+    @return ($px/$rem)+ rem;
+}
+
+// 根据dpr进行适配
+@mixin dpr-screen($dpr){
+    @media only screen and (-webkit-min-device-pixel-ratio:$dpr)
+    {
+      @content;
+    }
+}

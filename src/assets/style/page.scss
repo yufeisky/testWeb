@@ -1,0 +1,279 @@
+@import "./_function";
+:global {
+    body {
+        background: rgb(21, 20, 127) !important;
+    }
+    div,
+    p{
+        box-sizing: border-box;
+    }
+    .content-wrap {
+        background: rgb(21, 20, 127) url(../img/net/bg.png) no-repeat 0 0;
+        background-size: 100% auto;
+        padding-bottom: 10px;
+    }
+    .lz-banner {
+        height: px2rem(316);
+        position: relative;
+        z-index:9;
+
+        .award-icon{
+            width:px2rem(74);
+            height:px2rem(68);
+            position:fixed;
+            top:px2rem(73);
+            right:0;
+            background:url(../img/banner/award.png) no-repeat 0 0;
+            background-size:100% 100%;
+        }
+        .lizhi-icon{
+            width:px2rem(91);
+            height:px2rem(28);
+            position: absolute;
+            top:px2rem(69);
+            left:0;
+            z-index:9;
+            background:url(../img/banner/lizhiFM.png) no-repeat 0 0;
+            background-size:100% 100%;
+        }
+    }
+    .lz-nav {
+        width: 100%;
+        height: px2rem(48);
+        position: absolute;
+        bottom: 0;
+        left: 0;        
+    }
+    .lz-container {
+        padding: 0 px2rem(12) px2rem(50) px2rem(12);
+        position: relative;
+        z-index: 3;
+    }
+    .lz-footer {
+        height: 50px;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 9;
+    }
+    .lz-foot-nav {
+        display: flex;
+        height: 100%;
+        font-family: PangMenZhengDao;
+        dd {
+            height: 100%;
+            flex-grow: 1;
+            border-left: 1px solid rgb(135, 75, 245);
+            background: rgb(48, 17, 111);
+            line-height: px2rem(18);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+             :first {
+                border-left: none;
+            }
+            &.selected {
+                background-image: linear-gradient(to top, rgba(0, 254, 255, 0.5), rgba(35, 202, 251, 0.5)), linear-gradient(to top, rgb(120, 64, 190), rgb(67, 30, 138));
+                background-blend-mode: soft-light, normal;
+            }
+        }
+        .title {
+            font-size: px2rem(14);
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .time {
+            font-size: px2rem(11);
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+    // 数据空白提醒
+    .lz-empty-prompt{
+        font-family: PingFangSC;
+        font-size: px2rem(14);
+        font-weight: 500;
+        text-align: center;
+        color:rgba(255, 255, 255, 0.5);
+        position:absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%, -50%);
+    }
+    div.jzbd,
+    div.zrsyjz,
+    div.rwjz,
+    div.qljz,
+    div.thfs {
+        width: 100%;
+        height: px2rem(40);
+        background-size: 100% 100%;
+    }
+    // 家族榜单
+    .jzbd {
+        background: url(../img/title/jzbd.png) no-repeat 0 0;
+    }
+    // 头号粉丝
+    .thfs {
+        background: url(../img/title/thfs.png) no-repeat 0 0;
+    }
+    // 昨日闪耀家族
+    .zrsyjz {
+        background: url(../img/title/zrsyjz.png) no-repeat 0 0;
+    }
+    // 入围家族
+    .rwjz {
+        background: url(../img/title/rwjz.png) no-repeat 0 0;
+    }
+    // 潜力家族
+    .qljz {
+        background: url(../img/title/qljz.png) no-repeat 0 0;
+    }
+
+    // 家族赛区，声势排行榜提示信息
+    .jzsq-sound-prompt{
+        padding-bottom:px2rem(24);
+        
+        & .first-prompt,
+        & .second-prompt{
+            font-family: PingFangSC;
+            font-size: px2rem(13);
+            font-weight: normal;
+            text-align: left;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .first-prompt{
+            text-indent: 2em;
+            margin-top:px2rem(18);
+            margin-bottom:px2rem(12);
+        }
+        .second-prompt{
+            margin-top:px2rem(10);
+        }
+        .table-prompt{
+            background:url(../img/sound/table.png) no-repeat center center;
+            background-size:100% 100%;
+            height:px2rem(124);
+        }
+    }
+
+    .jzsq-activity-banner{
+        height:px2rem(135);
+        border-radius: px2rem(4);
+        margin:px2rem(24) 0 px2rem(24) 0;
+        background:url(../img/activity_banner.jpg) no-repeat 0 0;
+        background-size:100% 100%;
+    }
+
+    // 查看更多
+    .load-more{
+        width: px2rem(352);
+        height: px2rem(40);
+        line-height: px2rem(40);
+        text-align: center;
+        font-family: PangMenZhengDao;
+        font-size: px2rem(14);
+        color:rgba(255, 255, 255, 0.5);
+        border-radius: px2rem(4);
+        background-color: rgb(0, 47, 207);
+    }
+    .lz-list{
+        padding-bottom:px2rem(20);
+
+        .list-view-section-body{
+            :last-child{
+                border:none;
+            }
+        }
+        .list-item{
+            border-bottom:px2rem(2) solid rgba(255, 255, 255, 0.1);
+            padding:px2rem(12) 0;
+        }
+    }
+    // 高清显示屏(设备像素比例大于等于2)使用2倍图
+    @include dpr-screen(2) {
+        .content-wrap {
+            background-image:url(../img/net/bg@2x.png);
+        }
+        .jzbd {
+            background-image: url(../img/title/jzbd@2x.png);
+        }
+        .thfs {
+            background-image: url(../img/title/thfs@2x.png);
+        }
+        .zrsyjz {
+            background-image: url(../img/title/zrsyjz@2x.png);
+        }
+        .rwjz {
+            background-image: url(../img/title/rwjz@2x.png);
+        }
+        .qljz {
+            background-image: url(../img/title/qljz@2x.png);
+        }
+        .jzsq-sound-prompt{
+            .table-prompt{
+                background-image:url(../img/sound/table@2x.png);
+            }
+        }
+
+        .lz-banner {
+            .award-icon{
+                background-image:url(../img/banner/award@2x.png);
+            }
+            .lizhi-icon{
+                background-image:url(../img/banner/lizhiFM@2x.png);
+            }
+        }
+    }
+    // 高清显示屏(设备像素比例大于等于3)使用3倍图
+    @include dpr-screen(3) {
+        .content-wrap {
+            background-image:url(../img/net/bg@3x.png);
+        }
+        .jzbd {
+            background-image: url(../img/title/jzbd@3x.png);
+        }
+        .thfs {
+            background-image: url(../img/title/thfs@3x.png);
+        }
+        .zrsyjz {
+            background-image: url(../img/title/zrsyjz@3x.png);
+        }
+        .rwjz {
+            background-image: url(../img/title/rwjz@3x.png);
+        }
+        .qljz {
+            background-image: url(../img/title/qljz@3x.png);
+        }
+        .jzsq-sound-prompt{
+            .table-prompt{
+                background-image:url(../img/sound/table@2x.png);
+            }
+        }
+
+        .lz-banner {
+            .award-icon{
+                background-image:url(../img/banner/award@3x.png);
+            }
+            .lizhi-icon{
+                background-image:url(../img/banner/lizhiFM@3x.png);
+            }
+        }
+    }
+
+    // 判断是否为iPhoneX
+    @media (device-width: 375px) and (device-height: 812px) and (-webkit-min-device-pixel-ratio : 3){
+        //如果以后出现375*812,非ios机型，可以加上下面语句
+        @supports (bottom: constant(safe-area-inset-bottom)) {
+            .lz-banner {
+                
+                .award-icon{
+                    top:px2rem(93);
+                }
+                .lizhi-icon{
+                    top:px2rem(99);
+                }
+            }
+        }
+    }
+}

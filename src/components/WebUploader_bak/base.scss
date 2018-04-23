@@ -1,0 +1,99 @@
+@import "./Components/mixins";
+@import "./Components/config";
+@import "./Components/Card";
+
+body {
+    // background-color: rgb(236, 236, 236);
+}
+
+.#{$clsPrefix}card-box {
+    margin: 0 10px;
+}
+
+.btn-group {
+    @include clearfix();
+    clear: both;
+}
+
+.#{$clsPrefix}card-list {
+    @include clearfix();
+}
+
+.#{$clsPrefix}fileAdd {
+    @extend .#{$clsPrefix}card-box;
+    .#{$clsPrefix}card-border {
+        stroke: $info;
+        stroke-dasharray: 10!important;
+        stroke-dashoffset: 0!important;
+    }
+}
+
+.#{$clsPrefix}add-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    height: 1em;
+    margin: auto 0;
+
+    font-size: 60px;
+    line-height: 1;
+    text-align: center;
+    color: $info;
+    cursor: pointer;
+}
+
+.#{$clsPrefix}card-remover {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+
+    color: $danger;
+    cursor: pointer;
+    font: {
+        family: sans-serif;
+        size: 24px;
+        weight: bold;
+    }
+    line-height: 0;
+
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.#{$clsPrefix}card-box:hover .#{$clsPrefix}card-remover {
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+.#{$clsPrefix}upload-error .#{$clsPrefix}card-remover {
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+.#{$clsPrefix}preview {
+    width: 100%;
+}
+
+.#{$clsPrefix}fileinfo {
+    position: absolute;
+    bottom: 0;
+
+    padding: 0 10px;
+
+    h3 {
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin: 10px 0;
+
+        color: #999;
+    }
+}
+
+.webuploader-container {
+    display: none;
+}

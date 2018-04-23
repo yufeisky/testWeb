@@ -1,0 +1,56 @@
+@import '~@a/style/_function';
+:global {
+    .tabName {
+        font-family: PangMenZhengDao;
+        font-size: px2rem(20);
+        text-align: left;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    .am-tabs-default-bar-tab-active {
+        .tabName {
+            background-image: linear-gradient(to left, #7cafff, #95c1ff);
+            font-family: PangMenZhengDao;
+            font-size: px2rem(20);
+            text-align: center;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+    .am-tabs-default-bar {
+        width: 80%;
+    }
+    .am-tabs-default-bar-top .am-tabs-default-bar-tab {
+        border-bottom: px2rem(2) solid rgba(255, 255, 255, 0.1) !important;
+        cursor: pointer;
+        &::after {
+            display: none !important;
+        }
+    }
+    .am-tabs-default-bar-tab {
+        /* height: 43.5px;
+        line-height: 43.5px; */
+        height: px2rem(52);
+        line-height: px2rem(52);
+    }
+    .am-tabs-default-bar-underline {
+        position: absolute;
+        /* border: 1px #108ee9 solid; */
+        border: none;
+        background-size: 100% 100%;
+        background-position: center;
+        bottom: px2rem(-0.5);
+        z-index: 999;
+    }
+    .am-list-body {
+        background: none !important;
+    }
+    .am-list-body::before,
+    .am-list-body::after {
+        display: none !important;
+    }
+    html:not([data-scale]) .am-tabs-default-bar-top .am-tabs-default-bar-tab::after {
+        height: px2rem(2) !important;
+        color: rgba(255, 255, 255, 0.1);
+    }
+}

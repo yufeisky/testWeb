@@ -1,0 +1,12 @@
+@font-face {
+    font-family: "PangMenZhengDao";
+    src: url("PangMenZhengDao.eot"); /* IE9 */
+    src: url("PangMenZhengDao.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("PangMenZhengDao.woff") format("woff"), /* chrome, firefox */
+    url("PangMenZhengDao.ttf") format("truetype"), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url("PangMenZhengDao.svg#PangMenZhengDao") format("svg"); /* iOS 4.1- */
+    font-style: normal;
+    font-weight: normal;
+}
+
+
