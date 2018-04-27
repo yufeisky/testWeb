@@ -1,0 +1,37 @@
+.wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 376px;
+    height: 64px;
+    left: 50%;
+    margin-left: -188px;
+    z-index: 99;
+    background-color: #ffffff;
+    box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, 0.08);
+    .button {
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        width: 343px;
+        height: 44px;
+        line-height: 44px;
+        border-radius: 4px;
+        background-image: linear-gradient(84deg, #ee5090, #fe5353);
+        text-align: center;
+        .txt {
+            font-size: 14px;
+            color: #ffffff;
+        }
+        .step {
+            position: absolute;
+            right: 18px;
+            top: 10px;
+            height: 22px;
+            line-height: 22px;
+            font-size: 16px;
+            text-align: center;
+            color: #ffffff;
+        }
+    }
+}

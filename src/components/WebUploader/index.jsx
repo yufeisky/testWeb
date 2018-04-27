@@ -1,93 +1,164 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import jquery from '@/utils/jquery.min.js';
+// window.jQuery = window.$ = jquery;
+// import '@/utils/webuploader.min.js';
+import store from '@/utils/store.js';
+import {BASE_HOST} from '@/utils/config.js';
+import '@a/style/upload.css';
 import Style from './index.scss';
-// import $ from '@/utils/jquery-1.10.2.min.js';
-// import  '@/utils/webuploader.html5only.js';
-// window.$ = $;
-// import WebU from '@utils/webuploader.html5only.js';
-// import WebU from '../../utils/webuploader.html5only.js';
-// const WebUploader = require("./webuploader.js").WebUploader;
-// const WebU = require('../../utils/webuploader.html5only.js');
-class WebUploaderCom extends React.Component{
-    constructor(props){
+import mark from './mark.png';
+class WebUploaderCom extends React.Component {
+    constructor(props) {
         super(props);
+        this.state={
+            percentage:0,
+            imgSrc:null,
+            errorText:null
+        }
     }
-    componentDidMount(){
-        // init()
+    componentDidMount() {
+        this.init();
+        this.setImg();
     }
-    init(){
-        // this.WU = new WebUploader.create({
-        //     pick: {
-        //         id: '#filePicker',
-        //         label: '点击选择图片'
-        //     },
-        //     dnd: '#uploader .queueList',
-        //     paste: document.body,
-        //     auto:true,
-        //     accept: {
-        //         title: 'Images',
-        //         extensions: 'gif,jpg,jpeg,bmp,png',
-        //         mimeTypes: 'image/*'
-        //     },
-    
-        //     // swf文件路径
-        //     // swf: BASE_URL + '/js/Uploader.swf',
-    
-        //     disableGlobalDnd: true,
-    
-        //     chunked: true,
-        //     // server: 'http://webuploader.duapp.com/server/fileupload.php',
-        //     // server: 'http://2betop.net/fileupload.php',
-        //     server: 'http://api.upalapp.com/util/uploadFile',
-        //     fileNumLimit: 3,
-        //     fileSizeLimit: 500 * 1024 * 1024, // 200 M
-        //     fileSingleSizeLimit: 50 * 1024 * 1024 // 50 M
-        // });
-        // this.WU.on('filesQueued', files => {
-        //     let initfiles = files.map(file => {
-        //         this.setState({[file.id] : 0});
-        //         return new Promise((resolve, reject) => {
-        //             this.WU.makeThumb(file, (error, ret) => {
-        //                 if (error) {
-        //                 } else {
-        //                     file.preview = ret;
-        //                 }
-        //                 resolve();
-        //             }, this.props.styleConfig.width || 240, (this.props.styleConfig.width * 1.25) || 300);
-        //         });
-        //     });
-        //     Promise.all(initfiles).then(()=>{
-        //         let newList = this.state.fileList.concat(files);
-        //         this.setState({fileList: newList});
-        //     });
-        // });
-        // this.WU.on('uploadProgress', (file, percentage) => {
-        //     this.setState({[file.id]: percentage});
-        // });
-        // this.WU.on('uploadComplete', file => {
-        //     this.updateQueue();
-        // });
+    setImg(){
+        let self = this;
+        let {belong} = self.props;
+        let imgSrc = store.getState(belong);
+        if(imgSrc){
+            self.setState({
+                imgSrc
+            })            
+        }
     }
-    render(){
-        return(
-             <div id="uploader" className="wu-example">
-                <div className="queueList">
-                    <div id="dndArea" className="placeholder">
-                        <div id="filePicker"></div>
-                        <p>或将照片拖到这里，单次最多可选300张</p>
+    init() {
+        let self = this;
+        let {title,btnId,styleConfig,belong,showAction} = this.props;
+        this.uploader = new WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径 swf: BASE_URL + '/js/Uploader.swf', 文件接收服务端。
+            // server: 'http://api.upalapp.com/util/uploadFile',
+            server: `${BASE_HOST}/api/v1/picture/upload`,
+
+            // 选择文件的按钮。可选。 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: {
+                id: `#${btnId}`,
+                innerHTML: `<span style="color:#ffffff"></span>`,
+                multiple: false //是否开起同时选择多个文件能力
+            },
+
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            },
+
+            // resize: false,
+            // compress: false,
+            // sendAsBinary: true, //二进制的流的方式发送文件
+            fileNumLimit:10,
+            // duplicate: true
+        });
+        // 当有文件添加进来的时候
+        this
+            .uploader
+            .on('fileQueued', function (file) {
+                console.log(file);
+                self
+                    .uploader
+                    .makeThumb(file, function (error, src) {
+                        if (error) {
+                            $img.replaceWith('<span>不能预览</span>');
+                            return;
+                        }
+
+                      self.setState({
+                            imgSrc:src
+                      })
+                    }, parseInt(styleConfig.width), parseInt(styleConfig.height));
+            });
+
+        // 文件上传过程中创建进度条实时显示。
+        self
+            .uploader
+            .on('uploadProgress', function (file, percentage) {
+               self.setState({
+                percentage,
+                errorText:null
+               })
+            });
+
+        // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+        self
+            .uploader
+            .on('uploadSuccess', function (file, response) {
+                if (response.code===0 &&response.data) {
+                    let url = response.data;
+                    store.setState(belong,url);
+                    showAction(belong);
+                }
+            });
+
+        // 文件上传失败，显示上传出错。
+        self
+            .uploader
+            .on('uploadError', function (file) {
+                self.setState({
+                    errorText:'上传失败'
+                })
+            });
+
+        // 完成上传完了，成功或者失败，先删除进度条。
+        self
+            .uploader
+            .on('uploadComplete', function (file) {
+               
+            });
+
+        self
+            .uploader
+            .on('error', function (handler) {
+                alert('error')
+                if (handler == "Q_EXCEED_NUM_LIMIT") {
+                    uploader.reset();
+                }
+                if (handler == "F_DUPLICATE") {
+                    alert("文件重复");
+                }
+            });
+    }
+    retry(){
+        this.uploader.retry();
+    }
+    render() {
+        let {percentage,imgSrc,errorText} = this.state;
+        let {btnId,styleConfig,title} = this.props;
+        let bar_width= percentage*100;
+        let barStyle={
+            width:bar_width+'%'
+        }
+        console.log('btnId',btnId)
+        return (
+            <div className="uploader-wrap">
+                <div className={Style.title}>{title}</div>
+                <div id="uploader" className={Style.uploader} style={styleConfig}>
+                    {imgSrc?<div id="thelist" className="pp p_img uploader-list">
+                        <img className={Style.photo} src={imgSrc} alt=""/>
+                        <img className={Style.mark} src={mark} alt=""/>
+                    </div>:<span className={Style.tipText}>上传照片</span>}
+                    <div id={btnId} className={Style.selectBtn}>
                     </div>
-                </div>
-                <div className="statusBar" >
-                    <div className="progress">
-                        <span className="text">0%</span>
-                        <span className="percentage"></span>
-                    </div>
-                    <div className="info"></div>
-                    <div className="btns">
-                        <div id="filePicker2"></div>
-                        <div id="filePicker3">继续上传3</div>
-                        <div className="uploadBtn">开始上传</div>
-                    </div>
+                    {
+                        percentage>0 && percentage<1 ?
+                        <div className={Style.progress}>
+                            <div className={Style.precentage} style={barStyle}>{percentage}</div>
+                        </div>
+                        :null
+                    }
+                    {errorText ? <div className={Style.error}><div>{errorText}</div><div onClick={this.retry.bind(this)}>重新提交</div></div>:null}
                 </div>
             </div>
         )

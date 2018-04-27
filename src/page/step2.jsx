@@ -1,27 +1,29 @@
 import React from 'react';
 
-import { browserHistory } from 'react-router';
-import store from '@/utils/store.js';
-// import '@a/style/antd.scss';
+
 import {Toast} from 'antd-mobile';
+import store from '@/utils/store.js';
 import px2rem from '@a/js/px2rem.js';
 import WebUploader from '@cp/WebUploader/index.jsx';
 import {getSearchParam} from '@a/js/utils.js';
 import client from '@lizhife/client';
 import Button from '@cp/Button/index.jsx';
-
+const njId = getSearchParam('njId') || ''; // 主播id
 var isLizhi = client.isLizhiFM();
 
-class Step1 extends React.Component{
+
+class Step2 extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            belongArr:['guardianIdFrontUrl','guardianIdBackUrl']
+            belongArr:['guardianAuthorizeUrl']
         };
 
        
     }
     componentDidMount() {
+    }
+    showAction(res) {
         console.log('store',store)
     }
     checkIsReady(){
@@ -40,16 +42,11 @@ class Step1 extends React.Component{
         let self = this;
         let isReady = this.checkIsReady();
         if(isReady){
-            self.props.history.push('/step2')
-            console.log(store);
+            self.props.history.push('/step3')
         }else{
             Toast.info('请上传照片...',2)
         }
         console.log('isReady',isReady)
-    }
-    showAction(belong){
-        let self = this;
-        
     }
     render() {
         let _style ={
@@ -59,25 +56,19 @@ class Step1 extends React.Component{
             <div style={_style}>
                 <WebUploader 
                     btnId="picker1" 
-                    title={'监护人身份证正面照'} 
+                    title={'手持身份证&监护人手写同意说明书'} 
                     uploaderConfig={{server: 'url', pick: '#pick', auto: true}} 
-                    styleConfig={{width: '327px',height:'200px'}}  
-                    belong="guardianIdFrontUrl"
+                    styleConfig={{width: '327px',height:'200px'}}
+                    belong="guardianAuthorizeUrl"
                     showAction={this.showAction.bind(this)}
                     />
-                <WebUploader 
-                    btnId="picker2" 
-                    title={'监护人身份证背面照'} 
-                    uploaderConfig={{server: 'url', pick: '#pick', auto: true}} 
-                    styleConfig={{width: '327px',height:'200px'}} 
-                    belong="guardianIdBackUrl"
-                    showAction={this.showAction.bind(this)}
-                    />
-                <Button  name="下一步" txt="1/3" callBack={this.action.bind(this)}/>
+                <div style={{textAlign:'center',lineHeight:'24px',fontSize:'13px',color:'rgba(0,0,0,0.5)',marginTop:'40px'}}>监护人手写同意说明书需涵盖以下内容<br/>
+“本人同意未成年人子女在荔枝平台进行网络直播行为，确保其行为处于本人监督之下，并愿意承担未成年人子女使用本账号所产生的一切法律后果”。同意说明书右下方签名及注明日期（日期需为提交认证当日）</div>
+                <Button  name="下一步" txt="2/3" callBack={this.action.bind(this)}/>
             </div>
             
         );
     }
 }
 
-export default Step1;
+export default Step2;

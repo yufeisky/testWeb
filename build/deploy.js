@@ -3,7 +3,7 @@ var serverConfig = {
     host: '172.17.6.19',
     username: 'root',
     password: 'vm09#ops.fm',
-    path: '/mnt/lizhi_static/public/sfestival/static/gala/'
+    path: '/mnt/lizhi_static/public/sfestival/docker2/static/anchorverify/'
 }
 client.scp('./dist/', serverConfig, (err) => {
     if (!err) {

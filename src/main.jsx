@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom';
 import App from '@/App';
 import FastClick from 'fastclick';
 import lz from '@lizhife/lz-jssdk';
-
+import {getSearchParam} from '@a/js/utils.js';
+import store from '@/utils/store.js';
 window.lz = lz;
-
+const njId = getSearchParam('id') || ''; // 主播id
+console.log('userId',njId)
+store.setState('userId',njId);
+console.log(store)
 lz.config({
     debug: false,
     url: document.location.protocol == 'https:' ? 'https://h5security.lizhi.fm/jsBridgeConfig/get' : '',

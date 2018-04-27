@@ -13,12 +13,26 @@
     <script>
         ;
         (function() {
-            var src = '//cdn.bootcss.com/eruda/1.2.6/eruda.min.js';
+            var src = '//sfestival.lizhi.fm/static/public/eruda.min.js';
             if (!/dev=true/.test(window.location) && localStorage.getItem('dev') != 'true') return;
             document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
             document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
         })();
     </script>
+    <script>
+        if (/Android (\d+\.\d+)/.test(navigator.userAgent)) {
+            var version = parseFloat(RegExp.$1);
+            if (version > 2.3) {
+                var phoneScale = parseInt(window.screen.width) / 375;
+                document.write('<meta name="viewport" content="width=375, minimum-scale = ' + phoneScale + ', maximum-scale = ' + phoneScale + ', target-densitydpi=device-dpi">');
+            } else {
+                document.write('<meta name="viewport" content="width=375, target-densitydpi=device-dpi">');
+            }
+        } else {
+            document.write('<meta name="viewport" content="width=375, user-scalable=no, target-densitydpi=device-dpi">');
+        }
+    </script>
+
     <script>
         if (!window.Promise) {
             document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"' + '>' + '<' + '/' + 'script>');
@@ -35,20 +49,42 @@
     </script>
 
     <script src="//fepublic.lizhi.fm/web-report/webreport.var.js"></script>
+    <script src="//sfestival.lizhi.fm/static/public/jquery.min.js"></script>
+    <script src="//sfestival.lizhi.fm/static/public/webuploader.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"> -->
+    <style>
+        html {
+            position: relative;
+            width: 375px;
+            margin: 0 auto;
+            /* max-width: 375px; */
+        }
+        
+        body {
+            position: relative;
+            width: 375px;
+            margin: 0 auto;
+            min-height: 100%;
+        }
+    </style>
 </head>
 
 <body>
     <div id="root"></div>
-    <script>
-        document.body.onselectstart = function() {
-            return false;
-        };
-    </script>
+
     <!-- <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
 
     <script type="text/javascript" src="js/webuploader.html5only.js"></script> -->
+    <script>
+        // window.onerror = function(a, b, c) {
+        //     alert(a);
+        //     alert(b);
+        //     alert(c);
+        // }
+    </script>
 </body>
 
 </html>
