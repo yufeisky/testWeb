@@ -10,13 +10,13 @@ import client from '@lizhife/client';
 import Button from '@cp/Button/index.jsx';
 const njId = getSearchParam('njId') || ''; // 主播id
 var isLizhi = client.isLizhiFM();
-
+let next = false;
 
 class Step2 extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            belongArr:['guardianAuthorizeUrl']
+            belongArr:['guardianAuthorizeUrl'],
         };
 
        
@@ -44,18 +44,27 @@ class Step2 extends React.Component{
        
         let self = this;
         let state = this.checkIsReady();
-        console.log('state',state);
         switch(state){
             case 'noFile':
-            showToast? Toast.info('请上传照片...',2):null;
+                next=false;
+                showToast? Toast.info('请上传照片...',2):null;
                 return;
             case 'loading':
-            showToast?Toast.loading('请稍候，正在上传'):null;
+                showToast?Toast.loading('请稍候，正在上传'):null;
                 return;
             case 'end':
-                self.props.history.push('/step3');
+                if(next){
+                    next =false;
+                    self.props.history.push('/step3');
+                }
                 return;
         }
+    }
+    next(){
+        let self = this;
+        next=true
+        self.action(true)
+
     }
     showAction(belong){
         let self = this;
@@ -77,7 +86,7 @@ class Step2 extends React.Component{
                     />
                 <div style={{textAlign:'center',lineHeight:'24px',fontSize:'13px',color:'rgba(0,0,0,0.5)',marginTop:'40px'}}>监护人手写同意说明书需涵盖以下内容<br/>
 “本人同意未成年人子女在荔枝平台进行网络直播行为，确保其行为处于本人监督之下，并愿意承担未成年人子女使用本账号所产生的一切法律后果”。同意说明书右下方签名及注明日期（日期需为提交认证当日）</div>
-                <Button  name="下一步" txt="2/3" callBack={this.action.bind(this,true)}/>
+                <Button  name="下一步" txt="2/3" callBack={this.next.bind(this)}/>
             </div>
             
         );

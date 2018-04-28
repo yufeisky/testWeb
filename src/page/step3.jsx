@@ -10,7 +10,7 @@ import Button from '@cp/Button/index.jsx';
 import {anchorVerify} from '@a/js/api.js';
 const njId = getSearchParam('njId') || ''; // 主播id
 var isLizhi = client.isLizhiFM();
-
+let next =false;
 
 class Step3 extends React.Component{
     constructor(props) {
@@ -47,22 +47,32 @@ class Step3 extends React.Component{
         console.log('state',state);
         switch(state){
             case 'noFile':
-            showToast? Toast.info('请上传照片...',2):null;
+                showToast? Toast.info('请上传照片...',2):null;
+                next=false;
                 return;
             case 'loading':
             showToast?Toast.loading('请稍候，正在上传'):null;
                 return;
             case 'end':
-                let info = store.state;
-                anchorVerify(info).then((res)=>{
-                    if(res.code===0){
-                        self.props.history.push('/step4')
-                    }else{
-                        alert(res.msg)
-                    }
-                })
+                if(next){
+                    let info = store.state;
+                    anchorVerify(info).then((res)=>{
+                        if(res.code===0){
+                            self.props.history.push('/step4')
+                        }else{
+                            next = false;
+                            alert(res.msg)
+                        }
+                    })
+                }
                 return;
         }
+    }
+    next(){
+        let self = this;
+        next = true;
+        self.action(true)
+
     }
     showAction(belong){
         let self = this;
@@ -98,7 +108,7 @@ class Step3 extends React.Component{
                     belong="householdRegisterNjUrl"
                     showAction={this.showAction.bind(this)}
                     />
-                <Button name="提交审核" txt="3/3" callBack={this.action.bind(this,true)}/>
+                <Button name="提交审核" txt="3/3" callBack={this.next.bind(this)}/>
             </div>
             
         );

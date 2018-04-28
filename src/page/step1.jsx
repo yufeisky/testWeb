@@ -11,12 +11,12 @@ import client from '@lizhife/client';
 import Button from '@cp/Button/index.jsx';
 
 var isLizhi = client.isLizhiFM();
-
+let next = false;
 class Step1 extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            belongArr:['guardianIdFrontUrl','guardianIdBackUrl']
+            belongArr:['guardianIdFrontUrl','guardianIdBackUrl'],
         };
 
        
@@ -53,19 +53,29 @@ class Step1 extends React.Component{
         console.log('state',state);
         switch(state){
             case 'noFile':
-            showToast? Toast.info('请上传照片...',2):null;
+                next=false;
+                showToast? Toast.info('请上传照片...',2):null;
                 return;
             case 'loading':
-            showToast?Toast.loading('请稍候，正在上传'):null;
+                showToast?Toast.loading('请稍候，正在上传'):null;
                 return;
             case 'end':
-                self.props.history.push('/step2');
+                if(next){
+                    next = false;
+                    self.props.history.push('/step2')
+                }
                 return;
         }
     }
     showAction(belong){
         let self = this;
         self.action(false);
+    }
+    next(){
+        let self = this;
+        next=true;
+        self.action(true)
+
     }
     render() {
         let _style ={
@@ -89,7 +99,7 @@ class Step1 extends React.Component{
                     belong="guardianIdBackUrl"
                     showAction={this.showAction.bind(this)}
                     />
-                <Button  name="下一步" txt="1/3" callBack={this.action.bind(this,true)}/>
+                <Button  name="下一步" txt="1/3" callBack={this.next.bind(this)}/>
             </div>
             
         );
