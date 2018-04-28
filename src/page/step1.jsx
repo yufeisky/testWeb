@@ -23,33 +23,49 @@ class Step1 extends React.Component{
     }
     componentDidMount() {
         console.log('store',store)
+        let self = this;
+        // setInterval(function(){
+        //     let state = self.checkIsReady();
+        //     console.log('state',state);
+        // },500)
     }
     checkIsReady(){
         let self = this;
         let { belongArr } = this.state;
-        let isReady = true;
-        belongArr.forEach(function(k,v){
-            if(!store.getState(k)){
-                isReady = false;
+        let state='end';
+        let filesState = store.getState('filesState')||{};
+        console.log('filesState',store.state.filesState)
+        for(let i=0;i<belongArr.length;i++){
+            if(!filesState[belongArr[i]]){
+                state = 'noFile';
+                return state;
+            }else if(filesState[belongArr[i]]&&filesState[belongArr[i]]=='start'){
+                state = 'loading';
             }
-        })
-        return isReady;
-    }
-    action(a){
-        //点击下一步 要先校验上传成功与否
-        let self = this;
-        let isReady = this.checkIsReady();
-        if(isReady){
-            self.props.history.push('/step2')
-            console.log(store);
-        }else{
-            Toast.info('请上传照片...',2)
         }
-        console.log('isReady',isReady)
+        return state;
+    }
+    action(showToast){
+        //点击下一步 要先校验上传成功与否
+       
+        let self = this;
+        let state = this.checkIsReady();
+        console.log('state',state);
+        switch(state){
+            case 'noFile':
+            showToast? Toast.info('请上传照片...',2):null;
+                return;
+            case 'loading':
+            showToast?Toast.loading('请稍候，正在上传'):null;
+                return;
+            case 'end':
+                self.props.history.push('/step2');
+                return;
+        }
     }
     showAction(belong){
         let self = this;
-        
+        self.action(false);
     }
     render() {
         let _style ={
@@ -73,7 +89,7 @@ class Step1 extends React.Component{
                     belong="guardianIdBackUrl"
                     showAction={this.showAction.bind(this)}
                     />
-                <Button  name="下一步" txt="1/3" callBack={this.action.bind(this)}/>
+                <Button  name="下一步" txt="1/3" callBack={this.action.bind(this,true)}/>
             </div>
             
         );

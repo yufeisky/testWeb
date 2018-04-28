@@ -31,6 +31,25 @@ class WebUploaderCom extends React.Component {
             })            
         }
     }
+    updateStore(type){
+        let {belong,showAction} = this.props;
+        let filesState = store.getState('filesState')||{};
+        switch(type){
+            case 'start':
+                let imgSrc = store.getState(belong);
+                if(imgSrc){
+                    store.setState(belong,null); 
+                }
+                filesState[belong]='start';
+                store.setState('filesState',filesState);
+            return;
+            case 'end':
+                filesState[belong]='end';
+                store.setState('filesState',filesState); 
+                showAction(belong);
+            return;
+        }
+    }
     init() {
         let self = this;
         let {title,btnId,styleConfig,belong,showAction} = this.props;
@@ -55,7 +74,11 @@ class WebUploaderCom extends React.Component {
                 extensions: 'gif,jpg,jpeg,bmp,png',
                 mimeTypes: 'image/*'
             },
-
+            compress:{
+                quality: 10,
+                crop: false
+            },
+            fileSingleSizeLimit:5* 1024 * 1024,
             // resize: false,
             // compress: false,
             // sendAsBinary: true, //二进制的流的方式发送文件
@@ -66,7 +89,9 @@ class WebUploaderCom extends React.Component {
         this
             .uploader
             .on('fileQueued', function (file) {
-                console.log(file);
+                // console.log(file);
+                self.updateStore('start');
+                console.log('store',store)     
                 self
                     .uploader
                     .makeThumb(file, function (error, src) {
@@ -98,7 +123,11 @@ class WebUploaderCom extends React.Component {
                 if (response.code===0 &&response.data) {
                     let url = response.data;
                     store.setState(belong,url);
-                    showAction(belong);
+                    self.updateStore('end');
+                }else{
+                    self.setState({
+                        errorText:'上传失败'
+                    })
                 }
             });
 
@@ -121,17 +150,22 @@ class WebUploaderCom extends React.Component {
         self
             .uploader
             .on('error', function (handler) {
-                alert('error')
                 if (handler == "Q_EXCEED_NUM_LIMIT") {
                     uploader.reset();
                 }
                 if (handler == "F_DUPLICATE") {
                     alert("文件重复");
                 }
+                if(handler=="F_EXCEED_SIZE"){
+                    alert('上传文件超出限制')
+                }
             });
     }
     retry(){
         this.uploader.retry();
+        this.setState({
+            errorText:null
+        })
     }
     render() {
         let {percentage,imgSrc,errorText} = this.state;

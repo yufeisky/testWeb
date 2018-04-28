@@ -23,39 +23,50 @@ class Step3 extends React.Component{
         var test = store.getState('test')
         console.log('test',test)
     }
-    showAction(res) {
-        console.log('store',store)
-    }
     checkIsReady(){
         let self = this;
         let { belongArr } = this.state;
-        let isReady = true;
-        belongArr.forEach(function(k,v){
-            if(!store.getState(k)){
-                isReady = false;
+        let state='end';
+        let filesState = store.getState('filesState')||{};
+        console.log('filesState',store.state.filesState)
+        for(let i=0;i<belongArr.length;i++){
+            if(!filesState[belongArr[i]]){
+                state = 'noFile';
+                return state;
+            }else if(filesState[belongArr[i]]&&filesState[belongArr[i]]=='start'){
+                state = 'loading';
             }
-        })
-        return isReady;
-    }
-    action(a){
-        //点击下一步 要先校验上传成功与否
-        let self = this;
-        let isReady = this.checkIsReady();
-        if(isReady){
-            let info = store.state;
-            console.log(info)
-            anchorVerify(info).then((res)=>{
-                console.log(res)
-                if(res.code===0){
-                    self.props.history.push('/step4')
-                }else{
-                    alert(res.msg)
-                }
-            })
-        }else{
-            Toast.info('请上传照片...',2)
         }
-        console.log('isReady',isReady)
+        return state;
+    }
+    action(showToast){
+        //点击下一步 要先校验上传成功与否
+       
+        let self = this;
+        let state = this.checkIsReady();
+        console.log('state',state);
+        switch(state){
+            case 'noFile':
+            showToast? Toast.info('请上传照片...',2):null;
+                return;
+            case 'loading':
+            showToast?Toast.loading('请稍候，正在上传'):null;
+                return;
+            case 'end':
+                let info = store.state;
+                anchorVerify(info).then((res)=>{
+                    if(res.code===0){
+                        self.props.history.push('/step4')
+                    }else{
+                        alert(res.msg)
+                    }
+                })
+                return;
+        }
+    }
+    showAction(belong){
+        let self = this;
+        self.action(false);
     }
     render() {
         let _style ={
@@ -87,7 +98,7 @@ class Step3 extends React.Component{
                     belong="householdRegisterNjUrl"
                     showAction={this.showAction.bind(this)}
                     />
-                <Button name="提交审核" txt="3/3" callBack={this.action.bind(this)}/>
+                <Button name="提交审核" txt="3/3" callBack={this.action.bind(this,true)}/>
             </div>
             
         );

@@ -23,30 +23,43 @@ class Step2 extends React.Component{
     }
     componentDidMount() {
     }
-    showAction(res) {
-        console.log('store',store)
-    }
     checkIsReady(){
         let self = this;
         let { belongArr } = this.state;
-        let isReady = true;
-        belongArr.forEach(function(k,v){
-            if(!store.getState(k)){
-                isReady = false;
+        let state='end';
+        let filesState = store.getState('filesState')||{};
+        console.log('filesState',store.state.filesState)
+        for(let i=0;i<belongArr.length;i++){
+            if(!filesState[belongArr[i]]){
+                state = 'noFile';
+                return state;
+            }else if(filesState[belongArr[i]]&&filesState[belongArr[i]]=='start'){
+                state = 'loading';
             }
-        })
-        return isReady;
-    }
-    action(a){
-        //点击下一步 要先校验上传成功与否
-        let self = this;
-        let isReady = this.checkIsReady();
-        if(isReady){
-            self.props.history.push('/step3')
-        }else{
-            Toast.info('请上传照片...',2)
         }
-        console.log('isReady',isReady)
+        return state;
+    }
+    action(showToast){
+        //点击下一步 要先校验上传成功与否
+       
+        let self = this;
+        let state = this.checkIsReady();
+        console.log('state',state);
+        switch(state){
+            case 'noFile':
+            showToast? Toast.info('请上传照片...',2):null;
+                return;
+            case 'loading':
+            showToast?Toast.loading('请稍候，正在上传'):null;
+                return;
+            case 'end':
+                self.props.history.push('/step3');
+                return;
+        }
+    }
+    showAction(belong){
+        let self = this;
+        self.action(false);
     }
     render() {
         let _style ={
@@ -64,7 +77,7 @@ class Step2 extends React.Component{
                     />
                 <div style={{textAlign:'center',lineHeight:'24px',fontSize:'13px',color:'rgba(0,0,0,0.5)',marginTop:'40px'}}>监护人手写同意说明书需涵盖以下内容<br/>
 “本人同意未成年人子女在荔枝平台进行网络直播行为，确保其行为处于本人监督之下，并愿意承担未成年人子女使用本账号所产生的一切法律后果”。同意说明书右下方签名及注明日期（日期需为提交认证当日）</div>
-                <Button  name="下一步" txt="2/3" callBack={this.action.bind(this)}/>
+                <Button  name="下一步" txt="2/3" callBack={this.action.bind(this,true)}/>
             </div>
             
         );
